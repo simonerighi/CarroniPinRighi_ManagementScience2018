@@ -1,0 +1,16 @@
+maxpi_orig=NaN;
+locmax_orig=NaN;
+maxL_orig=NaN;
+maxGAMMA_orig=NaN;
+maxphi_orig=NaN;
+maxb_orig=NaN;
+maxpi_FOSD=NaN;
+maxL_FOSD=NaN;
+maxGAMMA_FOSD=NaN;
+maxphi_FOSD=NaN;
+maxb_FOSD=NaN;
+is_FOSD_Larger=NaN;
+Welfare_orig=NaN;
+Welfare_FOSD=NaN;
+diff_avg_orig=NaN;
+diff_avg_FOSD=NaN;
