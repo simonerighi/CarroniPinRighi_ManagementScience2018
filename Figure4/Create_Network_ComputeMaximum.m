@@ -1,4 +1,4 @@
-function [maxpi_orig,maxL_orig,maxGAMMA_orig,maxphi_orig,klowerbest,klowerbestrelative]=Create_Network_ComputeMaximum(n,gammag1,betaa)
+function [maxpi_orig,maxL_orig,maxGAMMA_orig,maxphi_orig,klowerbest,klowerbestrelative,klowerbest_only_public]=Create_Network_ComputeMaximum(n,gammag1,betaa)
 % Generates results for f being Scale Free and g being random.
 % Carroni Pin Righi (2018), submitted for pubblication in Management
 % Sciences
@@ -6,10 +6,9 @@ function [maxpi_orig,maxL_orig,maxGAMMA_orig,maxphi_orig,klowerbest,klowerbestre
 
 p1=1/2;
 p2=1/2;
-cost=0.12;
+cost=0.3;
 kmin=1;
-kmax=n-2;
-delta_gradi=30; % this could be chosen relative to var(fdik*k);
+kmax=100;
 warning off
 gammg=gammag1;
 howclose=1.0000e-13;
@@ -135,3 +134,36 @@ maxphi_orig=phi_orig(locmax_orig);
 klowerbest=kmin_orig_f+locmax_orig;
 klowerbestrelative=(kmin_orig_f+locmax_orig-1)/kmax_orig_f;
 
+
+% This gives the optimal profits for the case in which, on the same
+% network, only public WOM is considered
+
+Lorig=zeros(kmax_orig_f-kmin_orig_f+1,1);
+GAMMA_orig=zeros(kmax_orig_f-kmin_orig_f+1,1);
+phi_orig=zeros(kmax_orig_f-kmin_orig_f+1,1);
+b_orig=zeros(kmax_orig_f-kmin_orig_f+1,1);
+pi_orig=zeros(kmax_orig_f-kmin_orig_f+1,1);
+
+
+count=1;
+for klower=kmin_orig_f:1:kmax_orig_f
+    Lorig(count)=(1-p1)*sum(fdik_orig(find(kval_orig_f==klower):end)); % probability that an informed buyer passes the info.
+    GAMMA_orig(count)=1-sum(gdik_orig.*((1-Lorig(count)).^kval_orig_g));
+    phi_orig(count)=(1-p2)*sum(gdik_orig.*((1-(1-Lorig(count)).^kval_orig_g)./(kval_orig_g.*Lorig(count))));
+    if klower > kmin_orig_f % this solves the problem of numerical precision
+        if phi_orig(count-1)>0.49999999
+            phi_orig(count)=0.5;
+        end
+    end
+    b_orig(count)=cost/(phi_orig(count)*klower);
+    
+    pi_orig(count)=(1-betaa(1))*p1*(1-p1)+betaa(1)*(p2-b_orig(count))*(1-p2)*GAMMA_orig(count);
+    count=count+1;
+end
+
+[maxpi_orig_2,locmax_orig_2]=max(pi_orig);
+maxL_orig_2=Lorig(locmax_orig_2);
+maxGAMMA_orig_2=GAMMA_orig(locmax_orig_2);
+maxphi_orig_2=phi_orig(locmax_orig_2);
+maxb_orig_2=b_orig(locmax_orig_2);
+klowerbest_only_public=kmin_orig_f+locmax_orig_2;

@@ -7,8 +7,8 @@ clear all
 close all
 clc
 n=10000;
-gammag1=2.01:0.01:3.5;
-betaa=[0.2 0.3 0.4];
+gammag1=2.0:0.01:3;
+betaa=0.05;
 
 maxpi_orig=zeros(length(betaa),length(gammag1));
 maxL_orig=zeros(length(betaa),length(gammag1));
@@ -21,7 +21,7 @@ klowerbestrelative=zeros(length(betaa),length(gammag1));
 for i=1:length(betaa)
     for j=1:length(gammag1)
        display(['beta ' num2str(betaa(i)) ' - Gamma ' num2str(gammag1(j))])
-       [maxpi_orig(i,j),maxL_orig(i,j),maxGAMMA_orig(i,j),maxphi_orig(i,j),klowerbest(i,j),klowerbestrelative(i,j)]=Create_Network_ComputeMaximum(n,gammag1(j),betaa(i));
+       [maxpi_orig(i,j),maxL_orig(i,j),maxGAMMA_orig(i,j),maxphi_orig(i,j),klowerbest(i,j),klowerbestrelative(i,j),klowerbest_only_public(i,j)]=Create_Network_ComputeMaximum(n,gammag1(j),betaa(i));
       
     end
 end
@@ -38,13 +38,12 @@ clc
 load FSF_GRND_mixed_changeF
 
 figure(1)
-plot(gammag1,klowerbest(1,:),'b-');
+semilogy(gammag1,klowerbest(1,:),'b-');
 hold on
-plot(gammag1,klowerbest(2,:),'k-');
-hold on
-plot(gammag1,klowerbest(3,:),'r-');
-%legend('\beta=0.2','\beta=0.3','\beta=0.4')
+semilogy(gammag1,klowerbest_only_public(1,:),'r-');
+legend('Public and Private WOM','Only Public WOM')
 title({'Optimal $$\underline{k}$$ - Different $$\gamma_f$$';'Indegree:Random - Outdegree:SF'},'Interpreter','latex','FontSize',18)
 xlabel('\gamma_f','FontSize',18)
 ylabel('$$\underline{k}^*$$','Interpreter','latex','FontSize',18)
+ylim([0 100])
 print -depsc MixedChangeF_Grand_FSF.eps
