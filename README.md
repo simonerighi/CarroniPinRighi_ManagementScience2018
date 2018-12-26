@@ -1,5 +1,5 @@
 # CarroniPinRighi_ManagementScience2018
-This repository contains the simulations of the article from Elias Carroni, Paolo Pin and Simone Righi, submitted for publication to Management Sciences
+This repository contains the simulations of the article from Elias Carroni, Paolo Pin and Simone Righi, published on Management Sciences
 
 - Files contained in each folder allow to reproduce the panels of the figure with the same number. 
 
